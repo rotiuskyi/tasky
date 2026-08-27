@@ -1,5 +1,6 @@
 mod app;
 mod icons;
+mod widgets;
 
 use app::App;
 use iced::theme::Theme;

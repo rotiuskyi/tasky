@@ -3,6 +3,7 @@ use iced::alignment::Alignment;
 use iced::widget::{button, checkbox, column, container, row, text, text_input};
 
 use crate::icons;
+use crate::widgets::block::{self, block};
 
 #[derive(Debug, Default, Clone)]
 pub struct App {
@@ -62,16 +63,21 @@ impl App {
         .padding(4);
 
         task_list = task_list.extend(self.tasks.iter().enumerate().map(|(i, t)| {
-            row![
-                checkbox(t.done)
-                    .width(Fill)
-                    .label(&t.title)
-                    .on_toggle(move |checked| Msg::TaskDone(i, checked)),
-                button(icons::trash())
-                    .style(button::warning)
-                    .on_press(Msg::TaskRemove(i)),
-            ]
-            .spacing(4)
+            block(
+                row![
+                    checkbox(t.done)
+                        .width(Fill)
+                        .label(&t.title)
+                        .on_toggle(move |checked| Msg::TaskDone(i, checked)),
+                    button(icons::trash())
+                        .style(button::warning)
+                        .on_press(Msg::TaskRemove(i)),
+                ]
+                .align_y(Alignment::Center)
+                .spacing(4),
+            )
+            .padding(8)
+            .style(block::card)
             .into()
         }));
 
