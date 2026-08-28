@@ -338,7 +338,7 @@ pub fn card(theme: &Theme, status: Status) -> container::Style {
     container::Style {
         background: Some(background.into()),
         text_color: Some(palette.background.base.text),
-        border: border::rounded(8),
+        border: border::rounded(4),
         ..container::Style::default()
     }
 }
