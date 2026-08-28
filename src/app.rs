@@ -1,6 +1,9 @@
+use iced::Color;
 use iced::Length::Fill;
 use iced::alignment::Alignment;
-use iced::widget::{button, checkbox, column, container, row, text, text_input};
+use iced::widget::{
+    button, checkbox, column, container, hover, right_center, row, text, text_input,
+};
 
 use crate::icons;
 use crate::widgets::area::{self, area};
@@ -63,20 +66,31 @@ impl App {
         .padding(4);
 
         task_list = task_list.extend(self.tasks.iter().enumerate().map(|(i, t)| {
-            area(
+            let remove_btn = button(icons::trash())
+                .style(button::warning)
+                .on_press(Msg::TaskRemove(i));
+
+            // An invisible twin keeps the room for the button in the layout, so
+            // the row does not resize once the button shows up under the cursor.
+            let remove_btn_placeholder =
+                button(icons::trash()).style(|_theme, _status| button::Style {
+                    text_color: Color::TRANSPARENT,
+                    ..button::Style::default()
+                });
+
+            area(hover(
                 row![
                     checkbox(t.done)
                         .width(Fill)
                         .label(&t.title)
                         .on_toggle(move |checked| Msg::TaskDone(i, checked)),
-                    button(icons::trash())
-                        .style(button::warning)
-                        .on_press(Msg::TaskRemove(i)),
+                    remove_btn_placeholder,
                 ]
                 .align_y(Alignment::Center)
                 .spacing(4),
-            )
-            .padding(8)
+                right_center(remove_btn),
+            ))
+            .padding([4, 8])
             .style(area::card)
             .into()
         }));
