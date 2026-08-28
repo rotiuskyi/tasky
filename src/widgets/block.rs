@@ -38,10 +38,7 @@ where
 }
 
 /// A container whose style depends on its [`Status`].
-pub struct Block<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer>
-where
-    Renderer: renderer::Renderer,
-{
+pub struct Block<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer> {
     content: Element<'a, Message, Theme, Renderer>,
     width: Length,
     height: Length,
@@ -54,12 +51,12 @@ where
     style: StyleFn<'a, Theme>,
 }
 
-impl<'a, Message, Theme, Renderer> Block<'a, Message, Theme, Renderer>
-where
-    Renderer: renderer::Renderer,
-{
+impl<'a, Message, Theme, Renderer> Block<'a, Message, Theme, Renderer> {
     /// Creates a [`Block`] wrapping the given content.
-    pub fn new(content: impl Into<Element<'a, Message, Theme, Renderer>>) -> Self {
+    pub fn new(content: impl Into<Element<'a, Message, Theme, Renderer>>) -> Self
+    where
+        Renderer: renderer::Renderer,
+    {
         let content = content.into();
         let size = content.as_widget().size_hint();
 
