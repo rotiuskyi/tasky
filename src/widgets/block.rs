@@ -331,8 +331,8 @@ pub fn card(theme: &Theme, status: Status) -> container::Style {
     let palette = theme.extended_palette();
 
     let background = match status {
-        Status::Idle => palette.background.weakest.color,
-        Status::Hovered => palette.background.weak.color,
+        Status::Idle => palette.background.weakest.color.scale_alpha(0.5),
+        Status::Hovered => palette.background.weakest.color,
     };
 
     container::Style {
