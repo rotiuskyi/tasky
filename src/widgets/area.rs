@@ -1,7 +1,7 @@
 //! A `container` that reacts to its own state.
 //!
 //! `container` in iced styles itself with a `Fn(&Theme) -> container::Style`,
-//! so it cannot react to anything. [`Block`] is the same container with a
+//! so it cannot react to anything. [`Area`] is the same container with a
 //! `Fn(&Theme, Status)` style instead: it keeps its state in its own widget
 //! state, so the caller needs neither a message nor a field in the application.
 //!
@@ -15,7 +15,7 @@ use iced::{
     Background, Element, Event, Length, Padding, Rectangle, Size, Theme, Vector, alignment, border,
 };
 
-/// The current state of a [`Block`].
+/// The current state of a [`Area`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Status {
     /// The cursor is elsewhere.
@@ -24,21 +24,21 @@ pub enum Status {
     Hovered,
 }
 
-/// The style of a [`Block`] for a given [`Status`].
+/// The style of a [`Area`] for a given [`Status`].
 pub type StyleFn<'a, Theme> = Box<dyn Fn(&Theme, Status) -> container::Style + 'a>;
 
-/// Creates a [`Block`] wrapping the given content.
-pub fn block<'a, Message, Theme, Renderer>(
+/// Creates a [`Area`] wrapping the given content.
+pub fn area<'a, Message, Theme, Renderer>(
     content: impl Into<Element<'a, Message, Theme, Renderer>>,
-) -> Block<'a, Message, Theme, Renderer>
+) -> Area<'a, Message, Theme, Renderer>
 where
     Renderer: renderer::Renderer,
 {
-    Block::new(content)
+    Area::new(content)
 }
 
 /// A container whose style depends on its [`Status`].
-pub struct Block<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer> {
+pub struct Area<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer> {
     content: Element<'a, Message, Theme, Renderer>,
     width: Length,
     height: Length,
@@ -51,8 +51,8 @@ pub struct Block<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer> {
     style: StyleFn<'a, Theme>,
 }
 
-impl<'a, Message, Theme, Renderer> Block<'a, Message, Theme, Renderer> {
-    /// Creates a [`Block`] wrapping the given content.
+impl<'a, Message, Theme, Renderer> Area<'a, Message, Theme, Renderer> {
+    /// Creates a [`Area`] wrapping the given content.
     pub fn new(content: impl Into<Element<'a, Message, Theme, Renderer>>) -> Self
     where
         Renderer: renderer::Renderer,
@@ -74,43 +74,43 @@ impl<'a, Message, Theme, Renderer> Block<'a, Message, Theme, Renderer> {
         }
     }
 
-    /// Sets the [`Padding`] of the [`Block`].
+    /// Sets the [`Padding`] of the [`Area`].
     pub fn padding(mut self, padding: impl Into<Padding>) -> Self {
         self.padding = padding.into();
         self
     }
 
-    /// Sets the width of the [`Block`].
+    /// Sets the width of the [`Area`].
     pub fn width(mut self, width: impl Into<Length>) -> Self {
         self.width = width.into();
         self
     }
 
-    /// Sets the height of the [`Block`].
+    /// Sets the height of the [`Area`].
     pub fn height(mut self, height: impl Into<Length>) -> Self {
         self.height = height.into();
         self
     }
 
-    /// Sets the maximum width of the [`Block`].
+    /// Sets the maximum width of the [`Area`].
     pub fn max_width(mut self, max_width: impl Into<iced::Pixels>) -> Self {
         self.max_width = max_width.into().0;
         self
     }
 
-    /// Sets the maximum height of the [`Block`].
+    /// Sets the maximum height of the [`Area`].
     pub fn max_height(mut self, max_height: impl Into<iced::Pixels>) -> Self {
         self.max_height = max_height.into().0;
         self
     }
 
-    /// Aligns the contents of the [`Block`] horizontally.
+    /// Aligns the contents of the [`Area`] horizontally.
     pub fn align_x(mut self, align_x: impl Into<alignment::Horizontal>) -> Self {
         self.align_x = align_x.into();
         self
     }
 
-    /// Aligns the contents of the [`Block`] vertically.
+    /// Aligns the contents of the [`Area`] vertically.
     pub fn align_y(mut self, align_y: impl Into<alignment::Vertical>) -> Self {
         self.align_y = align_y.into();
         self
@@ -122,21 +122,21 @@ impl<'a, Message, Theme, Renderer> Block<'a, Message, Theme, Renderer> {
         self
     }
 
-    /// Sets the style of the [`Block`].
+    /// Sets the style of the [`Area`].
     pub fn style(mut self, style: impl Fn(&Theme, Status) -> container::Style + 'a) -> Self {
         self.style = Box::new(style);
         self
     }
 }
 
-/// The internal state of a [`Block`].
+/// The internal state of a [`Area`].
 #[derive(Debug, Default)]
 struct State {
     is_hovered: bool,
 }
 
 impl<Message, Theme, Renderer> Widget<Message, Theme, Renderer>
-    for Block<'_, Message, Theme, Renderer>
+    for Area<'_, Message, Theme, Renderer>
 where
     Renderer: renderer::Renderer,
 {
@@ -314,15 +314,15 @@ where
     }
 }
 
-impl<'a, Message, Theme, Renderer> From<Block<'a, Message, Theme, Renderer>>
+impl<'a, Message, Theme, Renderer> From<Area<'a, Message, Theme, Renderer>>
     for Element<'a, Message, Theme, Renderer>
 where
     Message: 'a,
     Theme: 'a,
     Renderer: renderer::Renderer + 'a,
 {
-    fn from(block: Block<'a, Message, Theme, Renderer>) -> Self {
-        Element::new(block)
+    fn from(area: Area<'a, Message, Theme, Renderer>) -> Self {
+        Element::new(area)
     }
 }
 
@@ -350,7 +350,7 @@ pub fn card(theme: &Theme, status: Status) -> container::Style {
 /// built-in ones:
 ///
 /// ```ignore
-/// block(content).style(hovered_bg(container::bordered_box, |theme| {
+/// area(content).style(hovered_bg(container::bordered_box, |theme| {
 ///     theme.extended_palette().primary.weak.color.into()
 /// }))
 /// ```

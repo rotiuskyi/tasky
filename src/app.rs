@@ -3,7 +3,7 @@ use iced::alignment::Alignment;
 use iced::widget::{button, checkbox, column, container, row, text, text_input};
 
 use crate::icons;
-use crate::widgets::block::{self, block};
+use crate::widgets::area::{self, area};
 
 #[derive(Debug, Default, Clone)]
 pub struct App {
@@ -63,7 +63,7 @@ impl App {
         .padding(4);
 
         task_list = task_list.extend(self.tasks.iter().enumerate().map(|(i, t)| {
-            block(
+            area(
                 row![
                     checkbox(t.done)
                         .width(Fill)
@@ -77,7 +77,7 @@ impl App {
                 .spacing(4),
             )
             .padding(8)
-            .style(block::card)
+            .style(area::card)
             .into()
         }));
 
