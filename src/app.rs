@@ -1,8 +1,8 @@
 use iced::Color;
-use iced::Length::Fill;
+use iced::Length;
 use iced::alignment::Alignment;
 use iced::widget::{
-    button, checkbox, column, container, hover, right_center, row, text, text_input,
+    button, center_x, checkbox, column, hover, right_center, row, scrollable, text, text_input,
 };
 
 use crate::icons;
@@ -81,7 +81,7 @@ impl App {
             area(hover(
                 row![
                     checkbox(t.done)
-                        .width(Fill)
+                        .width(Length::Fill)
                         .label(&t.title)
                         .on_toggle(move |checked| Msg::TaskDone(i, checked)),
                     remove_btn_placeholder,
@@ -95,7 +95,7 @@ impl App {
             .into()
         }));
 
-        container(task_list).align_x(Alignment::Center).into()
+        scrollable(center_x(task_list)).into()
     }
 
     fn create_task_from_draft(&self) -> Msg {
