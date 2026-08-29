@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 iced = { version = "0.14.0", features = ["advanced"] }
+iced_aw = { version = "0.14.1", features = ["full"] }
 iced_lucide = "0.1.0"
 
 [build-dependencies]
