@@ -6,6 +6,7 @@ use iced::widget::{
     button, center_x, checkbox, column, hover, right_center, row, scrollable, text, text_editor,
     text_input,
 };
+use iced_aw::menu::{Item, Menu, MenuBar};
 
 use crate::icons;
 use crate::widgets::area::{self, area};
@@ -23,12 +24,13 @@ pub struct App {
 pub enum Msg {
     Noop,
     TaskTitleDraft(String),
+    TaskDescriptionDraft(text_editor::Action),
     TaskNew(String),
     TaskDone(usize, bool),
     TaskRemove(usize),
-    TaskDescriptionDraft(text_editor::Action),
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 struct Task {
     title: String,
@@ -37,6 +39,7 @@ struct Task {
     done: bool,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 enum Priority {
     High,
@@ -91,14 +94,29 @@ impl App {
         let mut task_list = column![text("Task list").size(TITLE_SIZE)];
         task_list = task_list
             .extend(self.tasks.iter().enumerate().map(|(i, t)| {
-                let remove_btn = button(icons::trash())
-                    .style(button::warning)
-                    .on_press(Msg::TaskRemove(i));
+                let task_menu = MenuBar::new(vec![Item::with_menu(
+                    button(icons::ellipsis_vertical())
+                        .style(button::subtle)
+                        // The bar captures the press itself, so this message never
+                        // fires; it only keeps the trigger from looking disabled.
+                        .on_press(Msg::Noop),
+                    Menu::new(vec![
+                        Item::new(
+                            button(row![icons::trash(), text("Remove")].spacing(8))
+                                .style(button::subtle)
+                                .width(Length::Fill)
+                                .on_press(Msg::TaskRemove(i)),
+                        )
+                        .close_on_click(true),
+                    ])
+                    .max_width(160.0)
+                    .offset(4.0),
+                )]);
 
-                // An invisible twin keeps the room for the button in the layout, so
-                // the row does not resize once the button shows up under the cursor.
-                let remove_btn_placeholder =
-                    button(icons::trash()).style(|_theme, _status| button::Style {
+                // An invisible twin keeps the room for the trigger in the layout,
+                // so the row does not resize once it shows up under the cursor.
+                let task_menu_placeholder =
+                    button(icons::ellipsis_vertical()).style(|_theme, _status| button::Style {
                         text_color: Color::TRANSPARENT,
                         ..button::Style::default()
                     });
@@ -109,11 +127,11 @@ impl App {
                             .width(Length::Fill)
                             .label(&t.title)
                             .on_toggle(move |checked| Msg::TaskDone(i, checked)),
-                        remove_btn_placeholder,
+                        task_menu_placeholder,
                     ]
                     .align_y(Alignment::Center)
                     .spacing(4),
-                    right_center(remove_btn),
+                    right_center(task_menu),
                 ))
                 .padding([4, 8])
                 .style(area::card)

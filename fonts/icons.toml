@@ -1,7 +1,5 @@
 module = "icons"
 
 [icons]
-edit   = "pencil"
-save   = "save"
 trash  = "trash-2"
-search = "search"
+ellipsis_vertical = "ellipsis-vertical"
