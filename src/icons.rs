@@ -9,10 +9,7 @@ pub const FONT: &[u8] = include_bytes!("../fonts/lucide.ttf");
 /// All icons as `(name, codepoint_str)` pairs.
 /// Use this to populate an icon-picker widget.
 #[allow(dead_code)]
-pub const ALL_ICONS: &[(&str, &str)] = &[
-    ("ellipsis_vertical", "\u{E0B7}"),
-    ("trash", "\u{E18E}"),
-];
+pub const ALL_ICONS: &[(&str, &str)] = &[("ellipsis_vertical", "\u{E0B7}"), ("trash", "\u{E18E}")];
 
 pub fn ellipsis_vertical<'a>() -> Text<'a> {
     icon("\u{E0B7}")
@@ -26,7 +23,7 @@ pub fn trash<'a>() -> Text<'a> {
 /// Use this together with [`ALL_ICONS`] to display icons dynamically:
 /// ```ignore
 /// for (name, cp) in ALL_ICONS {
-///     button(render(cp)).on_press(Msg::Pick(name.to_string()))
+///     button(render(cp)).on_press(Message::Pick(name.to_string()))
 /// }
 /// ```
 pub fn render(codepoint: &str) -> Text<'_> {

@@ -1,5 +1,7 @@
 mod app;
 mod icons;
+mod models;
+mod tasks;
 mod widgets;
 
 use app::App;
