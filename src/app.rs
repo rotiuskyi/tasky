@@ -37,7 +37,7 @@ impl App {
                 .align_x(Alignment::Start)
                 .max_width(640)
                 .spacing(8)
-                .padding(4),
+                .padding([28, 4]),
         ))
         .into()
     }
