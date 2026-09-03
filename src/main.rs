@@ -1,11 +1,11 @@
-mod app;
+mod features;
 mod icons;
 mod models;
-mod tasks;
 mod widgets;
 
-use app::App;
 use iced::theme::Theme;
+
+use features::app::App;
 
 fn main() -> iced::Result {
     iced::application(App::default, App::update, App::view)

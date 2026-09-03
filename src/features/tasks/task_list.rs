@@ -2,12 +2,13 @@ use iced::Alignment;
 use iced::Color;
 use iced::Element;
 use iced::Length;
+use iced::widget::space;
 use iced::widget::{button, checkbox, column, hover, right_center, row, text};
 use iced_aw::menu::{Item, Menu, MenuBar};
 
+use crate::features::TITLE_SIZE_MD;
 use crate::icons;
 use crate::models::task::Task;
-use crate::tasks::TITLE_SIZE;
 use crate::widgets::area::{self, area};
 
 #[derive(Debug, Clone)]
@@ -31,7 +32,7 @@ pub fn update(tasks: &mut Vec<Task>, msg: Message) {
 }
 
 pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
-    let mut task_list = column![text("Task list").size(TITLE_SIZE)];
+    let mut task_list = column![text("Task list").size(TITLE_SIZE_MD)];
     task_list = task_list
         .extend(tasks.iter().enumerate().map(|(i, t)| {
             let task_menu = MenuBar::new(vec![Item::with_menu(
@@ -41,6 +42,12 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     // fires; it only keeps the trigger from looking disabled.
                     .on_press(Message::Noop),
                 Menu::new(vec![
+                    Item::new(
+                        button(row![space().width(16), "Status"].spacing(8))
+                            .width(Length::Fill)
+                            .style(button::subtle)
+                            .on_press(Message::Noop),
+                    ),
                     Item::new(
                         button(row![icons::trash(), text("Remove")].spacing(8))
                             .style(button::subtle)

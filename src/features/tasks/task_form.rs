@@ -1,11 +1,10 @@
 use iced::widget::{button, column, container, row, text, text_editor, text_input};
 use iced::{Alignment, Element, Length};
 
+use crate::features::TITLE_SIZE_MD;
+use crate::features::tasks::PRIORITY_OPS;
 use crate::models::task::{Priority, Task};
-use crate::tasks::TITLE_SIZE;
 use crate::widgets::select::select;
-
-const PRIORITY_OPS: [Priority; 3] = [Priority::High, Priority::Medium, Priority::Low];
 
 #[derive(Debug, Default)]
 pub struct TaskForm {
@@ -49,7 +48,7 @@ impl TaskForm {
 
     pub fn view(&self) -> Element<'_, Message> {
         column![
-            text("Create task").size(TITLE_SIZE),
+            text("Create task").size(TITLE_SIZE_MD),
             text_input("Title", &self.title)
                 .on_input(Message::ChangeTitle)
                 .on_submit(Message::Create),

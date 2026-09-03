@@ -1,9 +1,9 @@
 use iced::alignment::Alignment;
 use iced::widget::{center_x, column, scrollable};
 
+use crate::features::tasks::task_form::{self, TaskForm};
+use crate::features::tasks::task_list::{self, task_list};
 use crate::models::task::Task;
-use crate::tasks::task_form::{self, TaskForm};
-use crate::tasks::task_list::{self, task_list};
 
 #[derive(Debug, Default)]
 pub struct App {
