@@ -7,7 +7,7 @@ use iced::widget::{button, checkbox, column, hover, right_center, row, text};
 use iced_aw::menu::{Item, Menu};
 
 use crate::features::TITLE_SIZE_MD;
-use crate::features::tasks::{PRIORITY_OPS, to_priority_icon};
+use crate::features::tasks::{PRIORITY_OPS, priority_icon};
 use crate::icons;
 use crate::models::task::Priority;
 use crate::models::task::Task;
@@ -52,7 +52,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     PRIORITY_OPS
                         .into_iter()
                         .map(|p| {
-                            let p_icon = to_priority_icon(p);
+                            let p_icon = priority_icon(p);
                             Item::new(
                                 button(row![p_icon, text(p.to_string())].spacing(4))
                                     .width(Length::Fill)
@@ -100,7 +100,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
 
             area(hover(
                 row![
-                    to_priority_icon(t.priority),
+                    priority_icon(t.priority),
                     checkbox(t.is_done)
                         .label(&t.title)
                         .on_toggle(move |checked| Message::ChangeStatus(i, checked)),
