@@ -2,11 +2,9 @@ use iced::Alignment;
 use iced::Color;
 use iced::Element;
 use iced::Length;
-use iced::border;
 use iced::widget::space;
 use iced::widget::{button, checkbox, column, hover, right_center, row, text};
-use iced_aw::menu::{Item, Menu, MenuBar};
-use iced_aw::style::{Status, menu_bar};
+use iced_aw::menu::{Item, Menu};
 
 use crate::features::TITLE_SIZE_MD;
 use crate::features::tasks::PRIORITY_OPS;
@@ -14,6 +12,7 @@ use crate::icons;
 use crate::models::task::Priority;
 use crate::models::task::Task;
 use crate::widgets::area::{self, area};
+use crate::widgets::menu::menu_bar;
 use crate::widgets::select::select;
 
 #[derive(Debug, Clone)]
@@ -24,7 +23,6 @@ pub enum Message {
     RemoveTask(usize),
 }
 
-/// Applies a message of the list to the tasks it was built from.
 pub fn update(tasks: &mut Vec<Task>, msg: Message) {
     match msg {
         Message::ChangeStatus(i, is_done) => tasks[i].is_done = is_done,
@@ -38,21 +36,11 @@ pub fn update(tasks: &mut Vec<Task>, msg: Message) {
     }
 }
 
-fn menu_style(theme: &iced::Theme, status: Status) -> menu_bar::Style {
-    menu_bar::Style {
-        bar_border: border::rounded(2),
-        menu_border: border::rounded(2),
-        // The path is the highlight behind the hovered item.
-        path_border: border::rounded(2),
-        ..menu_bar::primary(theme, status)
-    }
-}
-
 pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
     let mut task_list = column![text("Task list").size(TITLE_SIZE_MD)];
     task_list = task_list
         .extend(tasks.iter().enumerate().map(|(i, t)| {
-            let task_menu = MenuBar::new(vec![Item::with_menu(
+            let task_menu = menu_bar(vec![Item::with_menu(
                 button(icons::ellipsis_vertical())
                     .style(button::subtle)
                     // The bar captures the press itself, so this message never
@@ -81,8 +69,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                 .max_width(160.0)
                 .offset(4.0)
                 .close_on_background_click(true),
-            )])
-            .style(menu_style);
+            )]);
 
             // An invisible twin keeps the room for the trigger in the layout,
             // so the row does not resize once it shows up under the cursor.

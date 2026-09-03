@@ -5,6 +5,8 @@ use iced::widget::overlay::menu;
 use iced::widget::{PickList, pick_list};
 use iced::{Color, Shadow, Theme, Vector, border};
 
+use crate::widgets::CONTROL_RADIUS;
+
 /// Creates a [`PickList`] with the default styles, ready to be overridden.
 pub fn select<'a, T, L, V, Message>(
     options: L,
@@ -31,7 +33,7 @@ pub fn default(theme: &Theme, status: pick_list::Status) -> pick_list::Style {
         placeholder_color: palette.background.weakest.text.scale_alpha(0.6),
         handle_color: palette.background.weakest.text,
         background: palette.background.weakest.color.into(),
-        border: border::rounded(2),
+        border: border::rounded(CONTROL_RADIUS),
     };
 
     match status {
@@ -51,7 +53,7 @@ pub fn default_menu(theme: &Theme) -> menu::Style {
         background: palette.background.base.color.into(),
         // The overlay reuses this radius for the highlight of each item,
         // so it has to stay as tight as the one of a `button`.
-        border: border::rounded(2),
+        border: border::rounded(CONTROL_RADIUS),
         text_color: palette.background.base.text,
         selected_background: palette.primary.weak.color.into(),
         selected_text_color: palette.primary.weak.text,
