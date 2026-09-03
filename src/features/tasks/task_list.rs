@@ -2,19 +2,25 @@ use iced::Alignment;
 use iced::Color;
 use iced::Element;
 use iced::Length;
+use iced::border;
 use iced::widget::space;
 use iced::widget::{button, checkbox, column, hover, right_center, row, text};
 use iced_aw::menu::{Item, Menu, MenuBar};
+use iced_aw::style::{Status, menu_bar};
 
 use crate::features::TITLE_SIZE_MD;
+use crate::features::tasks::PRIORITY_OPS;
 use crate::icons;
+use crate::models::task::Priority;
 use crate::models::task::Task;
 use crate::widgets::area::{self, area};
+use crate::widgets::select::select;
 
 #[derive(Debug, Clone)]
 pub enum Message {
     Noop,
     ChangeStatus(usize, bool),
+    ChangePriority(usize, Priority),
     RemoveTask(usize),
 }
 
@@ -22,12 +28,23 @@ pub enum Message {
 pub fn update(tasks: &mut Vec<Task>, msg: Message) {
     match msg {
         Message::ChangeStatus(i, is_done) => tasks[i].is_done = is_done,
+        Message::ChangePriority(i, p) => tasks[i].priority = p,
         Message::RemoveTask(i) => {
             tasks.remove(i);
         }
         // The menu bar captures the press of its trigger, so this one is
         // only ever built, never delivered.
         Message::Noop => {}
+    }
+}
+
+fn menu_style(theme: &iced::Theme, status: Status) -> menu_bar::Style {
+    menu_bar::Style {
+        bar_border: border::rounded(2),
+        menu_border: border::rounded(2),
+        // The path is the highlight behind the hovered item.
+        path_border: border::rounded(2),
+        ..menu_bar::primary(theme, status)
     }
 }
 
@@ -43,22 +60,29 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     .on_press(Message::Noop),
                 Menu::new(vec![
                     Item::new(
-                        button(row![space().width(16), "Status"].spacing(8))
-                            .width(Length::Fill)
-                            .style(button::subtle)
-                            .on_press(Message::Noop),
+                        select(PRIORITY_OPS, Some(&t.priority), move |p| {
+                            Message::ChangePriority(i, p)
+                        })
+                        .placeholder("Priority")
+                        .width(Length::Fill),
                     ),
                     Item::new(
-                        button(row![icons::trash(), text("Remove")].spacing(8))
-                            .style(button::subtle)
-                            .width(Length::Fill)
-                            .on_press(Message::RemoveTask(i)),
+                        button(row![
+                            text("Remove"),
+                            space().width(Length::Fill),
+                            icons::trash()
+                        ])
+                        .style(button::subtle)
+                        .width(Length::Fill)
+                        .on_press(Message::RemoveTask(i)),
                     )
                     .close_on_click(true),
                 ])
                 .max_width(160.0)
-                .offset(4.0),
-            )]);
+                .offset(4.0)
+                .close_on_background_click(true),
+            )])
+            .style(menu_style);
 
             // An invisible twin keeps the room for the trigger in the layout,
             // so the row does not resize once it shows up under the cursor.
