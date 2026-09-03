@@ -8,7 +8,7 @@ pub struct Task {
     pub is_done: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Priority {
     High,
     Medium,

@@ -7,13 +7,12 @@ use iced::widget::{button, checkbox, column, hover, right_center, row, text};
 use iced_aw::menu::{Item, Menu};
 
 use crate::features::TITLE_SIZE_MD;
-use crate::features::tasks::PRIORITY_OPS;
+use crate::features::tasks::{PRIORITY_OPS, to_priority_icon};
 use crate::icons;
 use crate::models::task::Priority;
 use crate::models::task::Task;
 use crate::widgets::area::{self, area};
 use crate::widgets::menu::menu_bar;
-use crate::widgets::select::select;
 
 #[derive(Debug, Clone)]
 pub enum Message {
@@ -40,6 +39,32 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
     let mut task_list = column![text("Task list").size(TITLE_SIZE_MD)];
     task_list = task_list
         .extend(tasks.iter().enumerate().map(|(i, t)| {
+            let priority_menu = Item::with_menu(
+                button(row![
+                    text(t.priority.to_string()),
+                    space().width(Length::Fill),
+                    icons::list_chevrons_up_down(),
+                ])
+                .width(Length::Fill)
+                .style(button::subtle)
+                .on_press(Message::Noop),
+                Menu::new(
+                    PRIORITY_OPS
+                        .into_iter()
+                        .map(|p| {
+                            let p_icon = to_priority_icon(p);
+                            Item::new(
+                                button(row![p_icon, text(p.to_string())].spacing(4))
+                                    .width(Length::Fill)
+                                    .style(button::subtle)
+                                    .on_press(Message::ChangePriority(i, p)),
+                            )
+                        })
+                        .collect(),
+                )
+                .max_width(160.0),
+            );
+
             let task_menu = menu_bar(vec![Item::with_menu(
                 button(icons::ellipsis_vertical())
                     .style(button::subtle)
@@ -47,13 +72,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     // fires; it only keeps the trigger from looking disabled.
                     .on_press(Message::Noop),
                 Menu::new(vec![
-                    Item::new(
-                        select(PRIORITY_OPS, Some(&t.priority), move |p| {
-                            Message::ChangePriority(i, p)
-                        })
-                        .placeholder("Priority")
-                        .width(Length::Fill),
-                    ),
+                    priority_menu,
                     Item::new(
                         button(row![
                             text("Remove"),
@@ -81,6 +100,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
 
             area(hover(
                 row![
+                    to_priority_icon(t.priority),
                     checkbox(t.is_done)
                         .label(&t.title)
                         .on_toggle(move |checked| Message::ChangeStatus(i, checked)),

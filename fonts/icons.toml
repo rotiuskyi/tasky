@@ -3,3 +3,8 @@ module = "icons"
 [icons]
 trash  = "trash-2"
 ellipsis_vertical = "ellipsis-vertical"
+signal_high = "signal-high"
+signal_medium = "signal-medium"
+signal_low = "signal-low"
+# list = "list"
+list_chevrons_up_down = "list-chevrons-up-down"
