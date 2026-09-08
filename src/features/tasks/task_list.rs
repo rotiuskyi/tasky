@@ -1,9 +1,5 @@
-use iced::Alignment;
-use iced::Color;
-use iced::Element;
-use iced::Length;
-use iced::widget::space;
-use iced::widget::{button, checkbox, column, hover, right_center, row, text};
+use iced::widget::{button, checkbox, column, container, hover, right_center, row, space, text};
+use iced::{Alignment, Color, Element, Length};
 use iced_aw::menu::{Item, Menu};
 
 use crate::features::TITLE_SIZE_MD;
@@ -11,7 +7,8 @@ use crate::features::tasks::{PRIORITY_OPS, priority_icon};
 use crate::icons;
 use crate::models::task::Priority;
 use crate::models::task::Task;
-use crate::widgets::area::{self, area};
+use crate::widgets::expandable::expandable;
+use crate::widgets::hoverable::{self, hoverable};
 use crate::widgets::menu::menu_bar;
 
 #[derive(Debug, Clone)]
@@ -98,21 +95,26 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     ..button::Style::default()
                 });
 
-            area(hover(
-                row![
-                    priority_icon(t.priority),
-                    checkbox(t.is_done)
-                        .label(&t.title)
-                        .on_toggle(move |checked| Message::ChangeStatus(i, checked)),
-                    task_menu_placeholder,
-                ]
-                .align_y(Alignment::Center)
-                .width(Length::Fill)
-                .spacing(4),
-                right_center(task_menu),
-            ))
-            .padding([4, 8])
-            .style(area::card)
+            expandable(
+                hoverable(
+                    container(hover(
+                        row![
+                            priority_icon(t.priority),
+                            checkbox(t.is_done)
+                                .label(&t.title)
+                                .on_toggle(move |checked| Message::ChangeStatus(i, checked)),
+                            task_menu_placeholder,
+                        ]
+                        .align_y(Alignment::Center)
+                        .width(Length::Fill)
+                        .spacing(4),
+                        right_center(task_menu),
+                    ))
+                    .padding([4, 8]),
+                )
+                .style(hoverable::card),
+                text(&t.description),
+            )
             .into()
         }))
         .spacing(4);
