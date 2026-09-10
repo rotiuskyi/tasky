@@ -107,7 +107,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                         ]
                         .align_y(Alignment::Center)
                         .width(Length::Fill)
-                        .spacing(4),
+                        .spacing(12),
                         right_center(task_menu),
                     ))
                     .padding([4, 8]),

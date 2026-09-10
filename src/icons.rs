@@ -1,6 +1,6 @@
 // Generated automatically by iced_lucide at build time.
 // Do not edit manually.
-// 150948d444cfbdb343a02ecad6f8b5914d89fcbb55674d0bbb7bfd22a9c269d5
+// b64df05ed258439ddd88a21b922eb35132c28b987395f0e3096d24791499802a
 use iced::Font;
 use iced::widget::{Text, text};
 
@@ -10,13 +10,25 @@ pub const FONT: &[u8] = include_bytes!("../fonts/lucide.ttf");
 /// Use this to populate an icon-picker widget.
 #[allow(dead_code)]
 pub const ALL_ICONS: &[(&str, &str)] = &[
+    ("circle", "\u{E076}"),
+    ("circle_alert", "\u{E077}"),
+    ("circle_dashed", "\u{E4B0}"),
     ("ellipsis_vertical", "\u{E0B7}"),
     ("list_chevrons_up_down", "\u{E696}"),
-    ("signal_high", "\u{E260}"),
-    ("signal_low", "\u{E261}"),
-    ("signal_medium", "\u{E262}"),
     ("trash", "\u{E18E}"),
 ];
+
+pub fn circle<'a>() -> Text<'a> {
+    icon("\u{E076}")
+}
+
+pub fn circle_alert<'a>() -> Text<'a> {
+    icon("\u{E077}")
+}
+
+pub fn circle_dashed<'a>() -> Text<'a> {
+    icon("\u{E4B0}")
+}
 
 pub fn ellipsis_vertical<'a>() -> Text<'a> {
     icon("\u{E0B7}")
@@ -24,18 +36,6 @@ pub fn ellipsis_vertical<'a>() -> Text<'a> {
 
 pub fn list_chevrons_up_down<'a>() -> Text<'a> {
     icon("\u{E696}")
-}
-
-pub fn signal_high<'a>() -> Text<'a> {
-    icon("\u{E260}")
-}
-
-pub fn signal_low<'a>() -> Text<'a> {
-    icon("\u{E261}")
-}
-
-pub fn signal_medium<'a>() -> Text<'a> {
-    icon("\u{E262}")
 }
 
 pub fn trash<'a>() -> Text<'a> {

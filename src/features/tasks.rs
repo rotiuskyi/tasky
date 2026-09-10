@@ -11,8 +11,8 @@ pub const PRIORITY_OPS: [Priority; 3] = [Priority::High, Priority::Medium, Prior
 
 fn priority_icon<'a>(p: Priority) -> Text<'a> {
     match p {
-        Priority::High => icons::signal_high().style(text::danger),
-        Priority::Medium => icons::signal_medium().style(text::warning),
-        Priority::Low => icons::signal_low().style(text::success),
+        Priority::High => icons::circle_alert().style(text::danger),
+        Priority::Medium => icons::circle().style(text::warning),
+        Priority::Low => icons::circle_dashed().style(text::success),
     }
 }
