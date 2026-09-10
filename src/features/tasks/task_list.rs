@@ -113,7 +113,7 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     .padding([4, 8]),
                 )
                 .style(hoverable::card),
-                text(&t.description),
+                container(text(&t.description)).padding([4, 8]),
             )
             .into()
         }))
