@@ -14,7 +14,6 @@ pub struct App {
 #[derive(Debug, Default)]
 pub struct TaskList {
     pub items: Vec<Task>,
-    pub selected_count: i32,
 }
 
 #[derive(Debug, Clone)]

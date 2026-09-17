@@ -1,6 +1,6 @@
 // Generated automatically by iced_lucide at build time.
 // Do not edit manually.
-// b64df05ed258439ddd88a21b922eb35132c28b987395f0e3096d24791499802a
+// e068ee1b0e6f90021cfe0e84dee4ef5d62a872323e0b85fe8a56a50071d18b1e
 use iced::Font;
 use iced::widget::{Text, text};
 
@@ -10,6 +10,9 @@ pub const FONT: &[u8] = include_bytes!("../fonts/lucide.ttf");
 /// Use this to populate an icon-picker widget.
 #[allow(dead_code)]
 pub const ALL_ICONS: &[(&str, &str)] = &[
+    ("check", "\u{E06C}"),
+    ("chevron_left", "\u{E06E}"),
+    ("chevron_right", "\u{E06F}"),
     ("circle", "\u{E076}"),
     ("circle_alert", "\u{E077}"),
     ("circle_dashed", "\u{E4B0}"),
@@ -17,6 +20,18 @@ pub const ALL_ICONS: &[(&str, &str)] = &[
     ("list_chevrons_up_down", "\u{E696}"),
     ("trash", "\u{E18E}"),
 ];
+
+pub fn check<'a>() -> Text<'a> {
+    icon("\u{E06C}")
+}
+
+pub fn chevron_left<'a>() -> Text<'a> {
+    icon("\u{E06E}")
+}
+
+pub fn chevron_right<'a>() -> Text<'a> {
+    icon("\u{E06F}")
+}
 
 pub fn circle<'a>() -> Text<'a> {
     icon("\u{E076}")
