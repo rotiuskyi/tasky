@@ -8,7 +8,13 @@ use crate::models::task::Task;
 #[derive(Debug, Default)]
 pub struct App {
     task_form: TaskForm,
-    tasks: Vec<Task>,
+    task_list: TaskList,
+}
+
+#[derive(Debug, Default)]
+pub struct TaskList {
+    pub items: Vec<Task>,
+    pub selected_count: i32,
 }
 
 #[derive(Debug, Clone)]
@@ -22,15 +28,15 @@ impl App {
         match msg {
             Message::TaskForm(msg) => match self.task_form.update(msg) {
                 task_form::Action::None => {}
-                task_form::Action::Create(task) => self.tasks.push(task),
+                task_form::Action::Create(task) => self.task_list.items.push(task),
             },
-            Message::TaskList(msg) => task_list::update(&mut self.tasks, msg),
+            Message::TaskList(msg) => task_list::update(&mut self.task_list, msg),
         }
     }
 
     pub fn view(&self) -> iced::Element<'_, Message> {
         let task_form = self.task_form.view().map(Message::TaskForm);
-        let task_list = task_list(&self.tasks).map(Message::TaskList);
+        let task_list = task_list(&self.task_list).map(Message::TaskList);
 
         scrollable(center_x(
             column![task_form, task_list]

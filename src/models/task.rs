@@ -5,6 +5,7 @@ pub struct Task {
     pub title: String,
     pub priority: Priority,
     pub description: String,
+    pub is_checked: bool,
     pub is_done: bool,
 }
 
@@ -28,5 +29,16 @@ impl fmt::Display for Priority {
             Priority::Medium => "Medium",
             Priority::Low => "Low",
         })
+    }
+}
+
+impl Into<String> for Priority {
+    fn into(self) -> String {
+        let s = match self {
+            Priority::High => "High",
+            Priority::Medium => "Medium",
+            Priority::Low => "Low",
+        };
+        s.to_string()
     }
 }

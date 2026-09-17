@@ -1,8 +1,7 @@
 pub mod task_form;
 pub mod task_list;
 
-use iced::widget::Text;
-use iced::widget::text;
+use iced::widget::text::{self, Text};
 
 use crate::icons;
 use crate::models::task::Priority;

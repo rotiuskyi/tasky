@@ -1,30 +1,46 @@
 use iced::widget::{button, checkbox, column, container, hover, right_center, row, space, text};
 use iced::{Alignment, Color, Element, Length};
-use iced_aw::menu::{Item, Menu};
 
 use crate::features::TITLE_SIZE_MD;
+use crate::features::app::TaskList;
 use crate::features::tasks::{PRIORITY_OPS, priority_icon};
 use crate::icons;
 use crate::models::task::Priority;
-use crate::models::task::Task;
 use crate::widgets::expandable::expandable;
 use crate::widgets::hoverable::{self, hoverable};
-use crate::widgets::menu::menu_bar;
+use crate::widgets::menu::menu;
+use crate::widgets::menu_item::{menu_item, menu_item_icon};
 
 #[derive(Debug, Clone)]
 pub enum Message {
     Noop,
+    Select(usize, bool),
     ChangeStatus(usize, bool),
     ChangePriority(usize, Priority),
     RemoveTask(usize),
+    RemoveAll,
 }
 
-pub fn update(tasks: &mut Vec<Task>, msg: Message) {
+pub fn update(task_list: &mut TaskList, msg: Message) {
     match msg {
-        Message::ChangeStatus(i, is_done) => tasks[i].is_done = is_done,
-        Message::ChangePriority(i, p) => tasks[i].priority = p,
+        Message::Select(i, is_checked) => {
+            if !task_list.items[i].is_checked {
+                task_list.selected_count += 1;
+            } else {
+                task_list.selected_count -= 1;
+            }
+            task_list.items[i].is_checked = is_checked;
+        }
+        Message::ChangeStatus(i, is_done) => {
+            task_list.items[i].is_done = is_done;
+        }
+        Message::ChangePriority(i, p) => task_list.items[i].priority = p,
         Message::RemoveTask(i) => {
-            tasks.remove(i);
+            task_list.items.remove(i);
+        }
+        Message::RemoveAll => {
+            task_list.items.retain(|t| !t.is_checked);
+            task_list.selected_count = 0;
         }
         // The menu bar captures the press of its trigger, so this one is
         // only ever built, never delivered.
@@ -32,60 +48,58 @@ pub fn update(tasks: &mut Vec<Task>, msg: Message) {
     }
 }
 
-pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
-    let mut task_list = column![text("Task list").size(TITLE_SIZE_MD)];
-    task_list = task_list
-        .extend(tasks.iter().enumerate().map(|(i, t)| {
-            let priority_menu = Item::with_menu(
-                button(row![
-                    text(t.priority.to_string()),
-                    space().width(Length::Fill),
-                    icons::list_chevrons_up_down(),
-                ])
-                .width(Length::Fill)
-                .style(button::subtle)
-                .on_press(Message::Noop),
-                Menu::new(
-                    PRIORITY_OPS
-                        .into_iter()
-                        .map(|p| {
-                            let p_icon = priority_icon(p);
-                            Item::new(
-                                button(row![p_icon, text(p.to_string())].spacing(4))
-                                    .width(Length::Fill)
-                                    .style(button::subtle)
-                                    .on_press(Message::ChangePriority(i, p)),
-                            )
-                        })
-                        .collect(),
-                )
-                .max_width(160.0),
-            );
+pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
+    let mut task_list = column![
+        row![
+            text("Task list").size(TITLE_SIZE_MD),
+            space().width(Length::Fill),
+            row![
+                text(format!("Selected: {}", task_list_data.selected_count)),
+                menu(
+                    menu_item_icon(icons::ellipsis_vertical).on_press(Message::Noop),
+                    vec![
+                        menu_item("Delete selected")
+                            .icon_right(icons::trash)
+                            .on_press(Message::RemoveAll)
+                    ]
+                ),
+            ]
+            .align_y(Alignment::Center)
+            .spacing(8)
+        ]
+        .align_y(Alignment::Center)
+    ];
 
-            let task_menu = menu_bar(vec![Item::with_menu(
-                button(icons::ellipsis_vertical())
-                    .style(button::subtle)
-                    // The bar captures the press itself, so this message never
-                    // fires; it only keeps the trigger from looking disabled.
-                    .on_press(Message::Noop),
-                Menu::new(vec![
-                    priority_menu,
-                    Item::new(
-                        button(row![
-                            text("Remove"),
-                            space().width(Length::Fill),
-                            icons::trash()
-                        ])
-                        .style(button::subtle)
-                        .width(Length::Fill)
+    task_list = task_list
+        .extend(task_list_data.items.iter().enumerate().map(|(i, t)| {
+            let task_menu = menu(
+                menu_item_icon(icons::ellipsis_vertical).on_press(Message::Noop),
+                vec![
+                    menu_item(t.priority)
+                        .icon_right(icons::list_chevrons_up_down)
+                        .on_press(Message::Noop)
+                        .with_menu(
+                            PRIORITY_OPS
+                                .into_iter()
+                                .map(|p| {
+                                    menu_item(p.to_string())
+                                        .icon_left(move || priority_icon(p))
+                                        .on_press(Message::ChangePriority(i, p))
+                                })
+                                .collect(),
+                        ),
+                    menu_item(display_status(t.is_done))
+                        .icon_right(icons::list_chevrons_up_down)
+                        .on_press(Message::Noop)
+                        .with_menu(vec![
+                            menu_item("Open").on_press(Message::ChangeStatus(i, false)),
+                            menu_item("Done").on_press(Message::ChangeStatus(i, true)),
+                        ]),
+                    menu_item("Delete")
+                        .icon_right(icons::trash)
                         .on_press(Message::RemoveTask(i)),
-                    )
-                    .close_on_click(true),
-                ])
-                .max_width(160.0)
-                .offset(4.0)
-                .close_on_background_click(true),
-            )]);
+                ],
+            );
 
             // An invisible twin keeps the room for the trigger in the layout,
             // so the row does not resize once it shows up under the cursor.
@@ -100,9 +114,9 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
                     container(hover(
                         row![
                             priority_icon(t.priority),
-                            checkbox(t.is_done)
-                                .label(&t.title)
-                                .on_toggle(move |checked| Message::ChangeStatus(i, checked)),
+                            checkbox(t.is_checked)
+                                .label(format!("[{}] {}", display_status(t.is_done), &t.title))
+                                .on_toggle(move |checked| Message::Select(i, checked)),
                             task_menu_placeholder,
                         ]
                         .align_y(Alignment::Center)
@@ -120,4 +134,11 @@ pub fn task_list(tasks: &[Task]) -> Element<'_, Message> {
         .spacing(4);
 
     task_list.into()
+}
+
+fn display_status(is_done: bool) -> &'static str {
+    match is_done {
+        true => "Done",
+        false => "Open",
+    }
 }

@@ -75,6 +75,7 @@ impl From<TaskForm> for Task {
             title: form.title,
             description: form.description.text(),
             priority: form.priority,
+            is_checked: false,
             is_done: false,
         }
     }

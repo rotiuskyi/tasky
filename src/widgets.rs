@@ -1,6 +1,8 @@
 pub mod expandable;
 pub mod hoverable;
 pub mod menu;
+pub mod menu_item;
+
 pub mod select;
 
 /// The corner radius of the controls: buttons, fields, menus.
