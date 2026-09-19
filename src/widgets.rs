@@ -1,13 +1,14 @@
-pub mod expandable;
+mod expandable;
 pub mod hoverable;
-pub mod menu;
-pub mod menu_item;
-pub mod select;
+mod menu;
+mod menu_item;
+mod select;
 
 pub use expandable::*;
 pub use hoverable::*;
 pub use menu::*;
 pub use menu_item::*;
+pub use select::*;
 
 /// The corner radius of the controls: buttons, fields, menus.
 ///

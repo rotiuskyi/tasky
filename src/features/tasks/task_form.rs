@@ -4,7 +4,7 @@ use iced::{Alignment, Element, Length};
 use crate::features::tasks::PRIORITY_OPS;
 use crate::features::{TITLE_SIZE_MD, editor_height_md};
 use crate::models::task::{Priority, Task};
-use crate::widgets::select::select;
+use crate::widgets::select;
 
 #[derive(Debug, Default)]
 pub struct TaskForm {
