@@ -48,7 +48,7 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
             space().width(Length::Fill),
             row![
                 text(format!(
-                    "Selected: {}",
+                    "{} selected",
                     selected_count(&task_list_data.items)
                 )),
                 menu(
