@@ -1,6 +1,6 @@
 // Generated automatically by iced_lucide at build time.
 // Do not edit manually.
-// e068ee1b0e6f90021cfe0e84dee4ef5d62a872323e0b85fe8a56a50071d18b1e
+// d5fa1e07c93be2a170b0c7648bcb02d4e9c30f3e1a76eb203690e82a880f9706
 use iced::Font;
 use iced::widget::{Text, text};
 
@@ -11,13 +11,11 @@ pub const FONT: &[u8] = include_bytes!("../fonts/lucide.ttf");
 #[allow(dead_code)]
 pub const ALL_ICONS: &[(&str, &str)] = &[
     ("check", "\u{E06C}"),
-    ("chevron_left", "\u{E06E}"),
-    ("chevron_right", "\u{E06F}"),
+    ("chevron_r", "\u{E06F}"),
     ("circle", "\u{E076}"),
     ("circle_alert", "\u{E077}"),
     ("circle_dashed", "\u{E4B0}"),
-    ("ellipsis_vertical", "\u{E0B7}"),
-    ("list_chevrons_up_down", "\u{E696}"),
+    ("ellipsis_v", "\u{E0B7}"),
     ("trash", "\u{E18E}"),
 ];
 
@@ -25,11 +23,7 @@ pub fn check<'a>() -> Text<'a> {
     icon("\u{E06C}")
 }
 
-pub fn chevron_left<'a>() -> Text<'a> {
-    icon("\u{E06E}")
-}
-
-pub fn chevron_right<'a>() -> Text<'a> {
+pub fn chevron_r<'a>() -> Text<'a> {
     icon("\u{E06F}")
 }
 
@@ -45,12 +39,8 @@ pub fn circle_dashed<'a>() -> Text<'a> {
     icon("\u{E4B0}")
 }
 
-pub fn ellipsis_vertical<'a>() -> Text<'a> {
+pub fn ellipsis_v<'a>() -> Text<'a> {
     icon("\u{E0B7}")
-}
-
-pub fn list_chevrons_up_down<'a>() -> Text<'a> {
-    icon("\u{E696}")
 }
 
 pub fn trash<'a>() -> Text<'a> {

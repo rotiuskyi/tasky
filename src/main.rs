@@ -1,5 +1,5 @@
 mod features;
-mod icons;
+mod icon;
 mod models;
 mod widgets;
 
@@ -10,7 +10,7 @@ use features::app::App;
 fn main() -> iced::Result {
     iced::application(App::default, App::update, App::view)
         .theme(Theme::CatppuccinLatte)
-        .font(icons::FONT)
+        .font(icon::FONT)
         .title("Tasky")
         .run()
 }

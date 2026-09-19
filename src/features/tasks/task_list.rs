@@ -6,12 +6,9 @@ use iced::{Alignment, Color, Element, Length};
 use crate::features::TITLE_SIZE_MD;
 use crate::features::app::TaskList;
 use crate::features::tasks::{PRIORITY_OPS, priority_icon};
-use crate::icons;
+use crate::icon;
 use crate::models::task::{Priority, Task};
-use crate::widgets::expandable::expandable;
-use crate::widgets::hoverable::{self, hoverable};
-use crate::widgets::menu::menu;
-use crate::widgets::menu_item::{menu_item, menu_item_icon};
+use crate::widgets::{expandable, hoverable, menu, menu_item, menu_item_icon};
 
 #[derive(Debug, Clone)]
 pub enum Message {
@@ -55,10 +52,10 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
                     selected_count(&task_list_data.items)
                 )),
                 menu(
-                    menu_item_icon(icons::ellipsis_vertical).on_press(Message::Noop),
+                    menu_item_icon(icon::ellipsis_v).on_press(Message::Noop),
                     vec![
                         menu_item("Delete")
-                            .icon_right(icons::trash)
+                            .icon_right(icon::trash)
                             .on_press(Message::RemoveAll)
                     ]
                 ),
@@ -73,12 +70,12 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
         .extend(task_list_data.items.iter().enumerate().map(|(i, t)| {
             let is_done = t.is_done;
             let task_menu = menu(
-                menu_item_icon(icons::ellipsis_vertical).on_press(Message::Noop),
+                menu_item_icon(icon::ellipsis_v).on_press(Message::Noop),
                 vec![
                     // Option to show selected Piority:
                     // menu_item(t.priority)
                     menu_item("Priority")
-                        .icon_right(icons::chevron_right)
+                        .icon_right(icon::chevron_r)
                         .on_press(Message::Noop)
                         .with_menu(
                             PRIORITY_OPS
@@ -95,7 +92,7 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
                     // Option to show selected Status:
                     // menu_item(display_status(t.is_done))
                     menu_item("Status")
-                        .icon_right(icons::chevron_right)
+                        .icon_right(icon::chevron_r)
                         .on_press(Message::Noop)
                         .with_menu(vec![
                             menu_item("Open")
@@ -106,7 +103,7 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
                                 .on_press(Message::ChangeStatus(i, true)),
                         ]),
                     menu_item("Delete")
-                        .icon_right(icons::trash)
+                        .icon_right(icon::trash)
                         .on_press(Message::RemoveTask(i)),
                 ],
             );
@@ -114,7 +111,7 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
             // An invisible twin keeps the room for the trigger in the layout,
             // so the row does not resize once it shows up under the cursor.
             let task_menu_placeholder =
-                button(icons::ellipsis_vertical()).style(|_theme, _status| button::Style {
+                button(icon::ellipsis_v()).style(|_theme, _status| button::Style {
                     text_color: Color::TRANSPARENT,
                     ..button::Style::default()
                 });
@@ -161,7 +158,7 @@ fn display_status(is_done: bool) -> &'static str {
 
 fn select_icon(is_selected: bool) -> Text<'static> {
     if is_selected {
-        icons::check()
+        icon::check()
     } else {
         text("").width(16)
     }

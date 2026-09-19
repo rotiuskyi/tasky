@@ -7,7 +7,7 @@ use iced::{Element, Font, Length, Pixels, Renderer, Size, Theme};
 
 use iced_aw::menu::{Item, Menu};
 
-/// Builds the icon anew on each view, already styled, e.g. `|| icons::trash().style(text::danger)`.
+/// Builds the icon anew on each view, already styled, e.g. `|| icon::trash().style(text::danger)`.
 type IconFn = Rc<dyn Fn() -> Text<'static>>;
 
 /// Must match the application's default text size (iced's default is 16).

@@ -1,12 +1,10 @@
-module = "icons"
+module = "icon"
 
 [icons]
 trash  = "trash-2"
-ellipsis_vertical = "ellipsis-vertical"
-list_chevrons_up_down = "list-chevrons-up-down"
+ellipsis_v = "ellipsis-vertical"
 circle_alert = "circle-alert"
 circle_dashed = "circle-dashed"
 circle = "circle"
-chevron_right = "chevron-right"
-chevron_left = "chevron-left"
+chevron_r = "chevron-right"
 check = "check"
