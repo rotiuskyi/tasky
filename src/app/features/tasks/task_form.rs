@@ -1,9 +1,9 @@
 use iced::widget::{button, column, container, row, text, text_editor, text_input};
 use iced::{Alignment, Element, Length};
 
-use crate::features::tasks::PRIORITY_OPS;
-use crate::features::{TITLE_SIZE_MD, editor_height_md};
-use crate::models::task::{Priority, Task};
+use crate::app::features::tasks::PRIORITY_OPTS;
+use crate::app::features::{TITLE_SIZE_MD, editor_height_md};
+use crate::app::models::{Priority, Task};
 use crate::widgets::select;
 
 #[derive(Debug, Default)]
@@ -57,7 +57,7 @@ impl TaskForm {
                 .min_height(editor_height_md())
                 .on_action(Message::ChangeDescription),
             row![
-                select(PRIORITY_OPS, Some(&self.priority), Message::ChangePriority)
+                select(PRIORITY_OPTS, Some(&self.priority), Message::ChangePriority)
                     .placeholder("Priority"),
                 container(button("Create").on_press(Message::Create))
                     .width(Length::Fill)

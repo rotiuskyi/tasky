@@ -3,12 +3,16 @@ use iced::widget::{
 };
 use iced::{Alignment, Color, Element, Length};
 
-use crate::features::TITLE_SIZE_MD;
-use crate::features::app::TaskList;
-use crate::features::tasks::{PRIORITY_OPS, priority_icon};
+use crate::app::features::TITLE_SIZE_MD;
+use crate::app::features::tasks::{PRIORITY_OPTS, priority_icon};
+use crate::app::models::{Priority, Task};
 use crate::icon;
-use crate::models::task::{Priority, Task};
 use crate::widgets::{expandable, hoverable, menu, menu_item, menu_item_icon};
+
+#[derive(Debug, Default)]
+pub struct TaskList {
+    pub items: Vec<Task>,
+}
 
 #[derive(Debug, Clone)]
 pub enum Message {
@@ -78,7 +82,7 @@ pub fn task_list(task_list_data: &TaskList) -> Element<'_, Message> {
                         .icon_right(icon::chevron_r)
                         .on_press(Message::Noop)
                         .with_menu(
-                            PRIORITY_OPS
+                            PRIORITY_OPTS
                                 .into_iter()
                                 .map(|p| {
                                     let is_selected = t.priority == p;

@@ -24,21 +24,20 @@ impl Default for Priority {
 
 impl fmt::Display for Priority {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str(match self {
-            Priority::High => "High",
-            Priority::Medium => "Medium",
-            Priority::Low => "Low",
-        })
+        f.write_str(priority_str(*self))
     }
 }
 
 impl Into<String> for Priority {
     fn into(self) -> String {
-        let s = match self {
-            Priority::High => "High",
-            Priority::Medium => "Medium",
-            Priority::Low => "Low",
-        };
-        s.to_string()
+        priority_str(self).to_string()
+    }
+}
+
+fn priority_str(p: Priority) -> &'static str {
+    match p {
+        Priority::High => "High",
+        Priority::Medium => "Medium",
+        Priority::Low => "Low",
     }
 }

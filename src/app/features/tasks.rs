@@ -3,10 +3,10 @@ pub mod task_list;
 
 use iced::widget::text::{self, Text};
 
+use crate::app::models::Priority;
 use crate::icon;
-use crate::models::task::Priority;
 
-pub const PRIORITY_OPS: [Priority; 3] = [Priority::High, Priority::Medium, Priority::Low];
+pub const PRIORITY_OPTS: [Priority; 3] = [Priority::High, Priority::Medium, Priority::Low];
 
 fn priority_icon<'a>(p: Priority) -> Text<'a> {
     match p {
